@@ -1,0 +1,191 @@
+COMBAT CODE
+
+import random as rand
+
+
+class Creature():
+    
+    def __init__(self, name, HP, defense):
+        self.name = name
+        self.HP = HP
+        self.defense = defense
+        
+class Player(Creature):
+    def __init__(self,name,HP,defense,Class,class_stat,speed,stamina):
+        super().__init__(name,HP,defense)
+        self.Class = Class   
+        self.class_stat = class_stat
+        self.speed = speed
+        self.stamina = stamina
+        
+class Enemy(Creature):
+    def __init__(self,name,HP,defense,attack1,boss):
+        super().__init__(name,HP,defense)
+        self.attack1 = attack1
+        self.boss = boss
+        
+class Beast(Enemy):
+    def __init__(self,name,HP,defense,attack1,attack2,boss):
+        super().__init__(name,HP,defense,attack1,boss)
+        self.attack2 = attack2
+        
+class Humanoid(Enemy):
+    def __init__(self,name,HP,defense,attack1,boss):
+        super().__init__(name,HP,defense,attack1,boss)
+    
+class Combat():
+    def __init__(self,PC,enemy):
+        self.player = PC
+        self.enemy = enemy
+    
+    def hitEnemy(self):
+        damage = rollDMG('PC')
+        if rand.random() >= .92:
+            crit = True
+        else:
+            crit = False
+            
+        if crit == False:
+            enemy.HP -= (damage-enemy.defense)
+            print(f'You hit the {enemy.name} for {damage} damage!')
+        else:
+            damage = int(damage * 1.8)
+            enemy.HP -= (damage-enemy.defense)
+            print(f'Critical hit!\nYou hit the {enemy.name} for {damage} damage!')
+            
+    def hitPlayer(self):
+        damage = rollDMG('E')
+        PC.HP -= damage
+        print(f'The {enemy.name} hit you for {damage} damage!')
+        print(f'Your current HP is {PC.HP}.')
+        
+    def startrandCombat(self):
+        print(f'As you continue down the path, a {enemy.name} approaches you.')
+    
+    def turn(self):
+############################################################################
+# Player turn      
+        fled = False
+        while PC.HP > 0 and enemy.HP > 0:
+            if PC.Class == 'barbarian':
+                choice = input("What would you like to do?\n(1) Swing Axe\n(2) Block\n(3) Flee\n").lower()
+                if choice == '1':
+                    combat.hitEnemy()
+                elif choice == '2':
+                    PC.defense += rand.randrange(4)  # Not really sure what to do with block
+                elif choice == '3':
+                    if enemy.boss == True:
+                        print("You cannot flee this battle!")
+                    else:
+                        fled = True
+                        break
+            elif PC.Class == 'wizard':
+                choice = input("What would you like to do?\n(1) Cast Spell\n(2) Mage Shield\n(3) Flee\n").lower()
+                if choice == '1':
+                    combat.hitEnemy()
+                elif choice == '2':
+                    PC.defense += rand.randrange(4)
+                elif choice == '3':
+                    if enemy.boss == True:
+                        print("You cannot flee this battle!")
+                    else:
+                        fled = True
+                        break
+            elif PC.Class == 'ranger':
+                choice = input("What would you like to do?\n(1) Shoot Arrow\n(2) Dodge\n(3) Flee\n").lower()
+                if choice == '1':
+                    combat.hitEnemy()
+                elif choice == '2':
+                    PC.defense += rand.randrange(4)
+                elif choice == '3':
+                    if enemy.boss == True:
+                        print("You cannot flee this battle!")
+                    else:
+                        fled = True
+                        break
+############################################################################
+            combat.hitPlayer()
+
+        if fled == True:
+            print("You fled the battle!")
+            fled = False
+        elif PC.HP <= 0:
+            print("GAME OVER! You died.")
+        elif enemy.HP <= 0:
+            print(f"You killed the {enemy.name}!")
+            
+def rollDMG(PC_or_E):
+    c = PC_or_E
+    if c == 'PC':
+        if PC.Class == 'barbarian':
+            damage = rand.randrange(6,10)
+        elif PC.Class == 'wizard':
+            damage = rand.randrange(3,15)
+        elif PC.Class == 'ranger':
+            damage = rand.randrange(8,12)
+    elif c == 'E':
+        if isinstance(enemy,Beast):
+            
+            if rand.random() > .7:
+                damage = getattr(enemy,'attack1')
+            else:
+                damage = getattr(enemy,'attack2')
+        else:
+            damage = getattr(enemy,'attack1')
+    return damage
+
+
+INTRODUCTION CODE
+
+import time
+
+def introduction():
+    print("You wake up to the faint smell of booze wafting in crevices of the inn’s bedroom.")
+    time.sleep(1)
+    print("The room is dimly lit, and you can hear the muffled sounds of people chatting downstairs.")
+    time.sleep(1)
+    print("As you sit up, you notice a mirror on the wall. What's your name?")
+    return input("> ")
+
+def tavern_lobby():
+    print(f"\nWelcome, {player_name}! You walk out into the tavern lobby.")
+    time.sleep(1)
+    print("The tavern is bustling with activity. People are chatting, and the bartender is busy serving drinks.")
+    time.sleep(1)
+    print("You glance outside, and it's a sunny day with a gentle breeze.")
+    time.sleep(1)
+    print("Memories from last night flash before your eyes...")
+    time.sleep(1)
+    print("Last night was a celebration of your accomplishment in saving the town from starvation.")
+    time.sleep(1)
+    print("You successfully restored the water source, and the town is thriving again.")
+    time.sleep(1)
+    print("The celebration got wild, with people dancing and cheering. You remember the drunk men causing a ruckus.")
+    time.sleep(1)
+    print("As you look over the quest board, nothing catches your eye until a panicking hobbit runs through the wooden doors.")
+    time.sleep(1)
+    print("He screams about a horrendous monster lurking in the swampy region of [place].")
+    time.sleep(1)
+    print("After the great accomplishments of the character, the people in the tavern immediately look to you, including the hobbit.")
+    time.sleep(1)
+    print("Someone in the tavern slowly walks up to you in the now-silent tavern and asks,")
+    time.sleep(1)
+    print(f'"{player_name.upper()} THE GREAT, {player_name.upper()} THE GREAT!! What art thou choose under this horrific circumstance?"')
+ 
+def choose_class():
+    print("\nChoose your response:")
+    print("1. Overconfidently (Barbarian)")
+    print("2. Cunningly (Ranger)")
+    print("3. Wisely (Wizard)")
+ 
+    choice = input("> ")
+ 
+    if choice == "1":
+        return "Barbarian"
+    elif choice == "2":
+        return "Ranger"
+    elif choice == "3":
+        return "Wizard"
+    else:
+        print("Invalid choice. Please choose again.")
+        return choose_class()
