@@ -1,0 +1,1 @@
+Hello! These are a few of the projects I have completed in my course work for classes such as Python and C/C++. These projects demonstrate accumulated knowledge and application of learned programming languages. 
