@@ -1,0 +1,212 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+class TicTacToe {
+private:
+ 
+char board[3][3]; //3x3 Tic-Tac-Toe board
+ 
+char currentPlayer; //Current player: 'X' or 'O'
+public:
+ 
+TicTacToe() {
+ 
+for (int i=0;i<3;++i)
+ 
+for (int j=0;j<3;++j)
+ 
+board[i][j]=' ';
+ 
+currentPlayer=(rand()%2==0)?'X':'O';
+ 
+}
+ 
+void display() {
+ 
+printf(" 1 2 3\n");
+ 
+for (int i = 0; i < 3; ++i) {
+ 
+printf("%d ", i + 1);
+ 
+for (int j = 0; j < 3; ++j) {
+ 
+printf("%c", board[i][j]);
+ 
+if (j < 2) printf("|");
+ 
+}
+ 
+printf("\n");
+ 
+if (i < 2) printf(" -----\n");
+ 
+}
+ 
+}
+ 
+bool isValid(int row,int col) {
+ 
+return row>=0 && row<3 && col>=0 && col<3 && board[row][col]==' ';
+ 
+}
+ 
+void move(int row,int col) {
+ 
+if (!isValid(row,col)) {
+ 
+printf("Illegal move! Try again.\n");
+ 
+return;
+ 
+}
+ 
+board[row][col]=currentPlayer;
+ 
+currentPlayer=(currentPlayer=='X')?'O':'X';
+ 
+}
+ 
+bool gameOver() {
+ 
+for (int i=0;i<3;++i) {
+ 
+if (board[i][0]!=' ' && board[i][0]==board[i][1] && board[i][1]==board[i][2])
+ 
+return true; //Row win
+ 
+if (board[0][i]!=' ' && board[0][i]==board[1][i] && board[1][i]==board[2][i])
+ 
+return true; //Column win
+ 
+}
+ 
+if (board[0][0]!=' ' && board[0][0]==board[1][1] && board[1][1]==board[2][2])
+ 
+return true; //Diagonal win
+ 
+if (board[0][2]!=' ' && board[0][2]==board[1][1] && board[1][1]==board[2][0])
+ 
+return true; //Diagonal win
+ 
+for (int i=0; i<3;++i)
+ 
+for (int j=0;j<3;++j)
+ 
+if (board[i][j]==' ')
+ 
+return false; //Game not over yet
+ 
+return true; //All cells filled, draw
+ 
+}
+ 
+char winner() {
+ 
+for (int i=0;i<3;++i) {
+ 
+if (board[i][0]!=' ' && board[i][0]==board[i][1] && board[i][1]==board[i][2])
+ 
+return board[i][0]; //Row win
+ 
+if (board[0][i]!=' ' && board[0][i]==board[1][i] && board[1][i]==board[2][i])
+ 
+return board[0][i]; //Column win
+ 
+}
+ 
+if (board[0][0]!=' ' && board[0][0]==board[1][1] && board[1][1]==board[2][2])
+ 
+return board[0][0]; //Diagonal win
+ 
+if (board[0][2]!=' ' && board[0][2]==board[1][1] && board[1][1]==board[2][0])
+ 
+return board[0][2]; //Diagonal win
+ 
+return ' '; //No winner
+ 
+}
+ 
+void playerMove() {
+ 
+int row, col;
+ 
+printf("Player %c's turn.\n", currentPlayer);
+ 
+do {
+ 
+printf("Enter row (1-3) & column (1-3), separated by space: ");
+ 
+scanf("%d %d",&row,&col);
+ 
+row--; col--; // Adjust to 0-based index
+
+ 
+} while (!isValid(row,col));
+ 
+move(row,col);
+ 
+}
+ 
+void computerMove() {
+ 
+int row,col;
+ 
+do {
+ 
+row=rand()%3;
+ 
+col=rand()%3;
+ 
+} while (!isValid(row,col));
+ 
+printf("Computer (Player %c) chooses cell %d %d\n",currentPlayer,row+1,col+1);
+ 
+move(row,col);
+ 
+}
+ 
+void play() {
+ 
+while (!gameOver()) {
+ 
+printf("Current board:\n");
+ 
+display();
+ 
+if (currentPlayer=='X')
+ 
+playerMove();
+ 
+else
+ 
+computerMove();
+ 
+}
+ 
+printf("Final board:\n");
+ 
+display();
+ 
+char w=winner();
+ 
+if (w!=' ')
+ 
+printf("Player %c wins!\n", w);
+ 
+else
+ 
+printf("It's a draw!\n");
+ 
+}
+};
+int main() {
+ 
+srand(time(NULL));
+ 
+TicTacToe game;
+ 
+game.play();
+ 
+return 0;
